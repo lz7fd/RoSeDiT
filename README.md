@@ -118,8 +118,8 @@ python evaluator.py VIRTUAL_imagenet256_labeled.npz samples/<folder>.npz
 `scripts/sample_50k.sh` wraps the sampling command for every released file. For classifier-free guidance, set
 `--cfg-scale` and, for guidance on an interval of noise levels, `--guidance-high` (as in REPA).
 
-The 50,000-sample archives behind the XL/2 and S/2 rows are at
-[lz7fdmu/RoSeDiT_samples](https://huggingface.co/datasets/lz7fdmu/RoSeDiT_samples), so those numbers can be
+The 50,000-sample archives behind RoSeDiT-XL/2 at 1.4M steps (7.98) and RoSeDiT-XL/2 + DSMC at 2.4M steps (5.84) are
+at [lz7fdmu/RoSeDiT_samples](https://huggingface.co/datasets/lz7fdmu/RoSeDiT_samples), so these two numbers can be
 recomputed without a GPU.
 
 ## Training
