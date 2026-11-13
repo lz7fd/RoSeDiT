@@ -1,2 +1,10 @@
 *.DS_Store
 .vscode/
+__pycache__/
+*.pyc
+exps/
+samples/
+wandb/
+checkpoints/
+pretrained_models/
+ckpts/

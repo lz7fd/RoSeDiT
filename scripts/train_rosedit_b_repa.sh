@@ -1,0 +1,17 @@
+#!/bin/bash
+# RoSeDiT-B/2 + REPA, 400K steps, one GPU, batch 256 (FID 21.01).
+# Usage: DATA=/path/to/preprocessed/imagenet bash scripts/train_rosedit_b_repa.sh [resume step]
+# A second argument resumes from exps/$EXP/checkpoints/<step>.pt; a resumed launch draws a new seed.
+set -e
+DATA=${DATA:?set DATA to the preprocessed ImageNet folder}
+EXP=${EXP:-rosedit-b-repa}
+STEP=${1:-0}
+if [ "$STEP" -gt 0 ]; then SEED=${SEED:-$(( (RANDOM * 32768 + RANDOM) % 900000 + 100000 ))}; else SEED=${SEED:-0}; fi
+export TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1
+
+accelerate launch --num_processes 1 train.py \
+  --report-to=wandb --allow-tf32 --mixed-precision=fp16 --seed=$SEED \
+  --path-type=linear --prediction=v --weighting=uniform \
+  --model="SiT-BR-B1W-DG-B/2" --enc-type=dinov2-vit-b --proj-coeff=0.5 --encoder-depth=4 --compile \
+  --data-dir=$DATA --resume-step=$STEP \
+  --max-train-steps=400000 --output-dir=exps --exp-name=$EXP

@@ -49,11 +49,15 @@ class SILoss:
 
         return alpha_t, sigma_t, d_alpha_t, d_sigma_t
 
-    def __call__(self, model, images, model_kwargs=None, zs=None):
+    def __call__(self, model, images, model_kwargs=None, zs=None, time_input=None, noises=None):
+        # time_input / noises: explicit per-row noise level (B,1,1,1) and noise (B,C,H,W), used by DSMC for the
+        # fixed triples; None = draw them here as usual.
         if model_kwargs == None:
             model_kwargs = {}
         # sample timesteps
-        if self.weighting == "uniform":
+        if time_input is not None:
+            pass
+        elif self.weighting == "uniform":
             time_input = torch.rand((images.shape[0], 1, 1, 1))
         elif self.weighting == "lognormal":
             # sample timestep according to log-normal distribution of sigmas following EDM
@@ -66,7 +70,7 @@ class SILoss:
                 
         time_input = time_input.to(device=images.device, dtype=images.dtype)
         
-        noises = torch.randn_like(images)
+        noises = torch.randn_like(images) if noises is None else noises.to(device=images.device, dtype=images.dtype)
         alpha_t, sigma_t, d_alpha_t, d_sigma_t = self.interpolant(time_input)
             
         model_input = alpha_t * images + sigma_t * noises
@@ -78,6 +82,8 @@ class SILoss:
         denoising_loss = mean_flat((model_output - model_target) ** 2)
 
         # projection loss
+        if zs is None or len(zs) == 0:  # no encoder: no alignment term
+            return denoising_loss, torch.zeros((), device=images.device)
         proj_loss = 0.
         bsz = zs[0].shape[0]
         for i, (z, z_tilde) in enumerate(zip(zs, zs_tilde)):
