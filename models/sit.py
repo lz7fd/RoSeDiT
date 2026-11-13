@@ -180,8 +180,9 @@ class BenchRoseBlock(nn.Module):
       order "C": structural pass -> listen -> dense pass -> MLP (rank-64 ablation)
       nostruct:  listen -> dense pass -> MLP (ablation without the structural pass)
     The listening gate (or the second readout layer) and the gates g_* of the
-    structural pass and of the controller tokens are zero-initialized, so the
-    block starts as SiT's block on the image tokens."""
+    structural pass and of the controller tokens are zero-initialized, so at
+    initialization the modulation reads the condition alone and the structural
+    pass contributes nothing."""
     def __init__(self, hidden_size, num_heads, mlp_ratio=4.0, order="B",
                  readout_rank=64, nostruct=False, readout="diag", **block_kwargs):
         super().__init__()
