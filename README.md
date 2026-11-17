@@ -1,5 +1,7 @@
 # RoSeDiT: Role-Separated Diffusion Transformers
 
+[**Paper (arXiv)**](https://arxiv.org/abs/2611.19009) | Want to see a different domain? [**RoSe in visual reasoning: RoSeViT**](https://github.com/lz7fd/RoSeViT)
+
 <img src="assets/teaser.png" alt="Role separation in a diffusion transformer block, and FID of RoSeDiT against SiT" width="95%" />
 
 Official code for **Role-Separated Diffusion Transformers: Global Rule Isolation and Deterministic Sampling Manifold
@@ -221,6 +223,17 @@ The `--model` names are the ones the models were trained under. The table maps t
 | `SiT-ROSE-DP2-NC-B/2` | RoSeDiT-Dualweight-B/2 - Both | 29.07 |
 
 All B/2 models are trained with the command above (`--encoder-depth=4`, 400K steps) and their own `--model`.
+
+## Citation
+
+```bibtex
+@article{liu2026rosedit,
+  title   = {Role-Separated Diffusion Transformers: Global Rule Isolation and Deterministic Sampling Manifold Compression},
+  author  = {Liu, Zhiguang and Shang, Yi},
+  journal = {arXiv preprint arXiv:2611.19009},
+  year    = {2026}
+}
+```
 
 ## Acknowledgement
 
